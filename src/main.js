@@ -1,7 +1,8 @@
+import '../config/firebase'
 import Vue from 'vue'
-
 import App from './AppDark'
 import router from './router'
+import VueFire from 'vuefire'
 import {
     Vuetify,
     VApp,
@@ -38,6 +39,8 @@ Vue.use(Vuetify, {
         warning: '#FFC107'
     }
 })
+
+Vue.use(VueFire)
 
 Vue.config.productionTip = false
 
