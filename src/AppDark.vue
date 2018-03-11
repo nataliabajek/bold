@@ -45,10 +45,10 @@
                 <table>
                     <tr>
                         <th>Minicart</th>
-                        <td v-for="beer in products" v-bind:key="beer['.key']" class="products">
-                            <img v-bind:src="'../static/products/' + beer.image">
-                            <p>{{beer.name}}</p> 
-                            <p class="price" :class="beer.price.type">{{beer.price.value}}</p>
+                        <td v-for="product in products" v-bind:key="product['.key']" class="products">
+                            <img v-bind:src="'../static/products/' + product.image">
+                            <p>{{product.name}}</p> 
+                            <p class="price" :class="product.price.type">{{product.price.value}}</p>
                             <button class="cart-btn" v-on:click="addToCart">Koszyk</button>
                             <button class="wishlist-btn" v-on:click="addToWishlist">Wishlista</button>
                         </td>
@@ -56,7 +56,8 @@
                     <tr v-for="(attName, attNameIndex) in attributes" v-bind:key="attName['.key']">
                         <th>{{attName.name}}</th>
                         <td v-for="beer in products" v-bind:key="beer['.key']">
-                          {{beer.attributes[attNameIndex]}}
+                            {{beer.attributes[attNameIndex]}}
+                            <!-- <span v-for="attValue in attValue">{{attValue[beer.attributes[attNameIndex]]}}</span> -->
                         </td>
                     </tr>
                 </table>
@@ -76,6 +77,18 @@ import { products } from '../config/firebase.js'
 import { attributes } from '../config/firebase.js'
 import { attributesIdValue } from '../config/firebase.js'
 export default {
+    mounted () {
+        this.attributesIdValue.forEach(data => {
+            this.attValue.push(data['.value'].split('|'))
+        })
+        console.log(this.attValue),
+        this.products.forEach(data => {
+            this.productAtt.push(data['attributes'].forEach(data2 => {
+                data2.split('|')
+            }))
+        })
+        console.log(this.productAtt)
+    },
     data () {
         return {
             clipped: false,
@@ -87,6 +100,8 @@ export default {
             rightDrawer: false,
             title: 'Vuetify.js',
             counter: 0,
+            attValue: [],
+            productAtt: [],
             cart: [],
             wishlist: []
         }
@@ -107,10 +122,12 @@ export default {
         }
     },
     name: 'AppDark',
-    firebase: {
-        products: products,
-        attributes: attributes,
-        attributesIdValue: attributesIdValue
+    firebase () {
+        return {
+            products: products,
+            attributes: attributes,
+            attributesIdValue: attributesIdValue
+        }
     }
 }
     // attributesIdValue = function(){
