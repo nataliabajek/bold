@@ -55,9 +55,10 @@
                     </tr>
                     <tr v-for="(attName, attNameIndex) in attributes" v-bind:key="attName['.key']">
                         <th>{{attName.name}}</th>
-                        <td v-for="beer in products" v-bind:key="beer['.key']">
-                            {{beer.attributes[attNameIndex]}}
-                            <!-- <span v-for="attValue in attValue">{{attValue[beer.attributes[attNameIndex]]}}</span> -->
+                        <td v-for="(product, productIndex) in products" v-bind:key="product['.key']">
+                            <span v-for="att in productAtt[productIndex][attNameIndex]" v-bind:key="att['.key']">
+                                {{attValue[attNameIndex][att-1]}}
+                            </span>
                         </td>
                     </tr>
                 </table>
@@ -82,10 +83,15 @@ export default {
             this.attValue.push(data['.value'].split('|'))
         })
         console.log(this.attValue),
-        this.products.forEach(data => {
-            this.productAtt.push(data['attributes'].forEach(data2 => {
-                data2.split('|')
-            }))
+        this.products.forEach(id => {
+            let tempAttributes = [];
+            id["attributes"].forEach((attribute, i) => {
+                tempAttributes.push(attribute.split("|"));
+                if (i == 5) {
+                    this.productAtt.push(tempAttributes);
+                    tempAttributes = [];
+                }
+            });
         })
         console.log(this.productAtt)
     },
