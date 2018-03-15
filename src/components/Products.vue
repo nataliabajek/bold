@@ -2,9 +2,16 @@
     .products{
         background-color: #424242;
         width: 500px;
+        position: relative;
     }
     button {
         padding: 5px 8px;
+    }
+    .delete-btn {
+    	position: absolute;
+    	top: 0;
+    	right: 0;
+    	background-color: #626262;
     }
     .cart-btn {
         background-color: firebrick;
@@ -21,17 +28,17 @@
     }
 </style>
 
-
 <template>
 	 <table>
         <tr>
             <th>Minicart</th>
             <td v-for="product in products" v-bind:key="product['.key']" class="products">
                 <img v-bind:src="'../static/products/' + product.image">
+                <button class="delete-btn" v-on:click="removeElement(product)">X</button>
                 <p>{{product.name}}</p> 
                 <p class="price" :class="product.price.type">{{product.price.value}}</p>
+                <button class="cart-btn" v-on:click="addToCart">Koszyk</button>
                 <button class="wishlist-btn" v-on:click="addToWishlist" :data-name=product>Wishlista</button>
-                <button v-on:click="removeElement(product)">X</button>
             </td>
         </tr>
         <tr v-for="(attName, attNameIndex) in attributes" v-bind:key="attName['.key']">
