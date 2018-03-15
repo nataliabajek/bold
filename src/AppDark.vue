@@ -1,25 +1,3 @@
-<style scoped>
-    .products{
-        background-color: #424242;
-    }
-    button {
-        padding: 5px 8px;
-    }
-    .cart-btn {
-        background-color: firebrick;
-    }
-    .wishlist-btn {
-        background-color: dodgerblue;
-    }
-    .price {
-        padding: 5px 8px;
-    }
-    .special {
-        background-color: yellow;
-        color: black;
-    }
-</style>
-
 <template>
 
 <v-app id="inspire" dark>
@@ -42,26 +20,7 @@
     <v-content>
         <v-container fluid fill-height>
             <v-layout justify-center align-center>
-                <table>
-                    <tr>
-                        <th>Minicart</th>
-                        <td v-for="product in products" v-bind:key="product['.key']" class="products">
-                            <img v-bind:src="'../static/products/' + product.image">
-                            <p>{{product.name}}</p> 
-                            <p class="price" :class="product.price.type">{{product.price.value}}</p>
-                            <button class="cart-btn" v-on:click="addToCart">Koszyk</button>
-                            <button class="wishlist-btn" v-on:click="addToWishlist">Wishlista</button>
-                        </td>
-                    </tr>
-                    <tr v-for="(attName, attNameIndex) in attributes" v-bind:key="attName['.key']">
-                        <th>{{attName.name}}</th>
-                        <td v-for="(product, productIndex) in products" v-bind:key="product['.key']">
-                            <span v-for="att in productAtt[productIndex][attNameIndex]" v-bind:key="att['.key']">
-                                {{attValue[attNameIndex][att-1]}}
-                            </span>
-                        </td>
-                    </tr>
-                </table>
+               <router-view/>
             </v-layout>
         </v-container>
     </v-content>
@@ -74,27 +33,7 @@
 
 <script>
 import Menu from '../config/menu.js'
-import { products } from '../config/firebase.js'
-import { attributes } from '../config/firebase.js'
-import { attributesIdValue } from '../config/firebase.js'
 export default {
-    mounted () {
-        this.attributesIdValue.forEach(data => {
-            this.attValue.push(data['.value'].split('|'))
-        })
-        console.log(this.attValue),
-        this.products.forEach(id => {
-            let tempAttributes = [];
-            id["attributes"].forEach((attribute, i) => {
-                tempAttributes.push(attribute.split("|"));
-                if (i == 5) {
-                    this.productAtt.push(tempAttributes);
-                    tempAttributes = [];
-                }
-            });
-        })
-        console.log(this.productAtt)
-    },
     data () {
         return {
             clipped: false,
@@ -104,12 +43,7 @@ export default {
             miniVariant: false,
             right: true,
             rightDrawer: false,
-            title: 'Vuetify.js',
-            counter: 0,
-            attValue: [],
-            productAtt: [],
-            cart: [],
-            wishlist: []
+            title: 'Vuetify.js'
         }
     },
     methods: {
@@ -117,30 +51,8 @@ export default {
             this.$router.push({
                 path: nav
             })
-        },
-        addToCart () {
-            this.cart.push(this.counter)
-            this.counter++
-            console.log(this.cart)
-        },
-        addToWishlist () {
-            this.wishlist.push({name: this.id})
         }
     },
-    name: 'AppDark',
-    firebase () {
-        return {
-            products: products,
-            attributes: attributes,
-            attributesIdValue: attributesIdValue
-        }
-    }
+    name: 'AppDark'
 }
-    // attributesIdValue = function(){
-    //    var result = [];
-    //    for(var i=0; i<attributesIdValue.length; i++){
-    //        result.push(attributesIdValue[i].split("|"))
-    //    }
-    //    return result
-    //   }
 </script>

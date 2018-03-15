@@ -10,9 +10,6 @@ const app = initializeApp({
 });
 
 export const db = app.database();
-// var data = db.once("value").then(function(snapshot) {
-// 	var x = snapshot.val();
-// });
 export const products = db.ref('products');
 export const attributes = db.ref('attributes');
 export const attributesIdValue = db.ref('attributesIdValue');
