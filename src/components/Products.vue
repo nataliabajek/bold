@@ -1,7 +1,6 @@
 <style scoped>
     .products{
         background-color: #424242;
-        width: 500px;
         position: relative;
     }
     button {
@@ -28,23 +27,24 @@
     }
 </style>
 
+
 <template>
 	 <table>
         <tr>
             <th>Minicart</th>
-            <td v-for="product in products" v-bind:key="product['.key']" class="products">
-                <img v-bind:src="'../static/products/' + product.image">
-                <button class="delete-btn" v-on:click="removeElement(product)">X</button>
+            <td v-for="product in products" :key="product['.key']" :class="product['.key']" class="products">
+                <img :src="'../static/products/' + product.image">
+                <button class="delete-btn" @click="removeElement(product['.key'])">X</button>
                 <p>{{product.name}}</p> 
                 <p class="price" :class="product.price.type">{{product.price.value}}</p>
-                <button class="cart-btn" v-on:click="addToCart">Koszyk</button>
-                <button class="wishlist-btn" v-on:click="addToWishlist" :data-name=product>Wishlista</button>
+                <button class="cart-btn" @click="addToCart">Koszyk</button>
+                <button class="wishlist-btn" @click="addToWishlist" :data-name=product>Wishlista</button>
             </td>
         </tr>
-        <tr v-for="(attName, attNameIndex) in attributes" v-bind:key="attName['.key']">
+        <tr v-for="(attName, attNameIndex) in attributes" :key="attName['.key']">
             <th>{{attName.name}}</th>
-            <td v-for="(beer, beerIndex) in products" v-bind:key="beer['.key']">
-                <span v-for="att in productAtt[beerIndex][attNameIndex]" v-bind:key="att['.key']">
+            <td v-for="(product, productIndex) in products" :key="product['.key']" :class="product['.key']">
+                <span v-for="att in productAtt[productIndex][attNameIndex]" :key="att['.key']">
                     {{attValue[attNameIndex][att-1]}}
                 </span>
             </td>
@@ -90,12 +90,19 @@
             // console.log(this.cart)
         },
 	        addToWishlist (event) {
-	            debugger;
-	            this.wishlist.push(event.target);
-	            console.log(this.wishlist);
+	            // debugger;
+	            // this.wishlist.push(event.target);
+	            // console.log(this.wishlist);
 	        },
-	        removeElement(product) {
-	            this.products.$remove(product);
+	        removeElement (product) {
+	        	var itemsToDelete = document.getElementsByClassName(product);
+	        	var rowsAmount = document.getElementsByTagName("tr").length;
+	        	for (var i = 0; i < itemsToDelete.length; i++) {
+	        		while (rowsAmount > 0) {
+	        			itemsToDelete[i].parentNode.removeChild(itemsToDelete[i]);
+	        			rowsAmount --;
+	        		}
+	        	};
 	        }
 	    },
 	    firebase () {
