@@ -37,8 +37,8 @@
                 <button class="delete-btn" @click="removeElement(product['.key'])">X</button>
                 <p>{{product.name}}</p> 
                 <p class="price" :class="product.price.type">{{product.price.value}}</p>
-                <button class="cart-btn" @click="addToCart">Koszyk</button>
-                <button class="wishlist-btn" @click="addToWishlist" :data-name=product>Wishlista</button>
+                <button class="cart-btn" @click="addToCart(product)">Koszyk</button>
+                <button class="wishlist-btn" @click="addToWishlist(product['.key'])" :data-name=product>Wishlista</button>
             </td>
         </tr>
         <tr v-for="(attName, attNameIndex) in attributes" :key="attName['.key']">
@@ -82,20 +82,26 @@
 	        })
 	    },
 	    methods: {
-	    	addToCart (event) {
-            // let formData = Object(event.target)
-            // formData.productName = String(formData.('productName'))
-            // this.cart.dispatch('addToCart', productName)
-            // formData = []
-            // console.log(this.cart)
-        },
-	        addToWishlist (event) {
-	            // debugger;
-	            // this.wishlist.push(event.target);
-	            // console.log(this.wishlist);
+	    	addToCart (product) {
+	    		var thisCart = this.cart;
+	    		if (thisCart.length > 0) {
+	    			thisCart.forEach(function(index){
+			    		if (index[0] == product.name) {
+			    			index[1] = index[1] + 1
+			    		} else {
+			    			thisCart.push([product.name, 1, product.price.value]);
+			    		}
+		    		});
+	    		} else {
+	    			thisCart.push([product.name, 1, product.price.value]);
+	    		};	    		
+		    	console.log(this.cart);
 	        },
-	        removeElement (product) {
-	        	var itemsToDelete = document.getElementsByClassName(product);
+	        addToWishlist (event) {
+	        	
+	        },
+	        removeElement (key) {
+	        	var itemsToDelete = document.getElementsByClassName(key);
 	        	var rowsAmount = document.getElementsByTagName("tr").length;
 	        	for (var i = 0; i < itemsToDelete.length; i++) {
 	        		while (rowsAmount > 0) {
