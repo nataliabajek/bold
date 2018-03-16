@@ -38,7 +38,7 @@
                 <p>{{product.name}}</p> 
                 <p class="price" :class="product.price.type">{{product.price.value}}</p>
                 <button class="cart-btn" @click="addToCart(product)">Koszyk</button>
-                <button class="wishlist-btn" @click="addToWishlist(product['.key'])" :data-name=product>Wishlista</button>
+                <button class="wishlist-btn" @click="addToWishlist(product)" :data-name=product>Wishlista</button>
             </td>
         </tr>
         <tr v-for="(attName, attNameIndex) in attributes" :key="attName['.key']">
@@ -84,21 +84,48 @@
 	    methods: {
 	    	addToCart (product) {
 	    		var thisCart = this.cart;
+	    		var counter = 0;
 	    		if (thisCart.length > 0) {
-	    			thisCart.forEach(function(index){
-			    		if (index[0] == product.name) {
-			    			index[1] = index[1] + 1
+	    			for (var index in thisCart) {
+			    		if (thisCart[index][0] == product.name) {
+			    			thisCart[index][1] ++;
+			    			break
 			    		} else {
-			    			thisCart.push([product.name, 1, product.price.value]);
+			    			counter ++;
+			    			if (counter == thisCart.length) {
+			    				thisCart.push([product.name, 1, product.price.value]);
+			    				break
+			    			} else {
+			    				continue;
+			    			}	    			
 			    		}
-		    		});
+		    		};
 	    		} else {
 	    			thisCart.push([product.name, 1, product.price.value]);
 	    		};	    		
-		    	console.log(this.cart);
+		    	console.log(thisCart);
 	        },
-	        addToWishlist (event) {
-	        	
+	        addToWishlist (product) {
+	        	var thisWishlist = this.wishlist;
+	    		var counter = 0;
+	    		if (thisWishlist.length > 0) {
+	    			for (var index in thisWishlist) {
+			    		if (thisWishlist[index][0] == product.name) {
+			    			break
+			    		} else {
+			    			counter ++;
+			    			if (counter == thisWishlist.length) {
+			    				thisWishlist.push([product.name, product.price.value]);
+			    				break
+			    			} else {
+			    				continue;
+			    			}	    			
+			    		}
+		    		};
+	    		} else {
+	    			thisWishlist.push([product.name, 1]);
+	    		};	    		
+		    	console.log(thisWishlist);
 	        },
 	        removeElement (key) {
 	        	var itemsToDelete = document.getElementsByClassName(key);
