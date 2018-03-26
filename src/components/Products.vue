@@ -27,15 +27,14 @@
   }
 </style>
 
-
 <template>
-   <table>
+  <table>
     <tr>
       <th>Minicart</th>
       <td v-for="product in products" :key="product['.key']" :class="product['.key']" class="products">
         <img :src="'../static/products/' + product.image">
         <button class="delete-btn" @click="removeElement(product['.key'])">X</button>
-        <p>{{product.name}}</p> 
+        <p>{{product.name}}</p>
         <p class="price" :class="product.price.type">{{product.price.value}}</p>
         <button class="cart-btn" @click="addToCart(product)">Koszyk</button>
         <button class="wishlist-btn" @click="addToWishlist(product)" :data-name=product>Wishlista</button>
@@ -80,10 +79,10 @@
       },
       methods: {
           addToCart (product) {
-              var thisCart = this.cart
-              var counter = 0
+              let thisCart = this.cart
+              let counter = 0
               if (thisCart.length > 0) {
-                  for (var index in thisCart) {
+                  for (let index in thisCart) {
                       if (thisCart[index][0] === product.name) {
                           thisCart[index][1]++
                           break
@@ -96,17 +95,16 @@
                               continue
                           }
                       }
-                  };
+                  }
               } else {
                   thisCart.push([product.name, 1, product.price.value])
-              };
-              console.log(thisCart)
+              }
           },
           addToWishlist (product) {
-              var thisWishlist = this.wishlist
-              var counter = 0
+              let thisWishlist = this.wishlist
+              let counter = 0
               if (thisWishlist.length > 0) {
-                  for (var index in thisWishlist) {
+                  for (let index in thisWishlist) {
                       if (thisWishlist[index][0] === product.name) {
                           break
                       } else {
@@ -118,21 +116,20 @@
                               continue
                           }
                       }
-                  };
+                  }
               } else {
                   thisWishlist.push([product.name, 1])
-              };
-              console.log(thisWishlist)
+              }
           },
           removeElement (key) {
-              var itemsToDelete = document.getElementsByClassName(key)
-              var rowsAmount = document.getElementsByTagName('tr').length
-              for (var i = 0; i < itemsToDelete.length; i++) {
+              let itemsToDelete = document.getElementsByClassName(key)
+              let rowsAmount = document.getElementsByTagName('tr').length
+              for (let i = 0; i < itemsToDelete.length; i++) {
                   while (rowsAmount > 0) {
                       itemsToDelete[i].parentNode.removeChild(itemsToDelete[i])
                       rowsAmount--
                   }
-              };
+              }
           }
       },
       firebase () {
