@@ -31,18 +31,18 @@
   <table>
     <tr>
       <th>Minicart</th>
-      <td v-for="product in products" :key="product['.key']" :class="product['.key']" class="products">
+      <td v-for="product in productsList" :key="product['.key']" :class="product['.key']" class="products">
         <img :src="'../static/products/' + product.image">
-        <button class="delete-btn" @click="removeElement(product['.key'])">X</button>
+        <button class="delete-btn" @click="removeElement(product)">X</button>
         <p>{{product.name}}</p>
         <p class="price" :class="product.price.type">{{product.price.value}}</p>
-        <button class="cart-btn" @click="addToCart(product)">Koszyk</button>
+        <button class="cart-btn" @click="addToCart(product, )">Koszyk</button>
         <button class="wishlist-btn" @click="addToWishlist(product)" :data-name=product>Wishlista</button>
       </td>
     </tr>
     <tr v-for="(attName, attNameIndex) in attributes" :key="attName['.key']">
       <th>{{attName.name}}</th>
-      <td v-for="(product, productIndex) in products" :key="product['.key']" :class="product['.key']">
+      <td v-for="(product, productIndex) in productsList" :key="product['.key']" :class="product['.key']">
         <span v-for="att in productAtt[productIndex][attNameIndex]" :key="att['.key']">
           {{attValue[attNameIndex][att-1]}}
         </span>
@@ -56,6 +56,7 @@
   export default {
       data () {
           return {
+              productsList: [],
               attValue: [],
               productAtt: [],
               cart: [],
@@ -75,6 +76,7 @@
                       tempAttributes = []
                   }
               })
+              this.productsList.push(id)
           })
       },
       methods: {
@@ -121,15 +123,16 @@
                   thisWishlist.push([product.name, 1])
               }
           },
-          removeElement (key) {
-              let itemsToDelete = document.getElementsByClassName(key)
-              let rowsAmount = document.getElementsByTagName('tr').length
-              for (let i = 0; i < itemsToDelete.length; i++) {
-                  while (rowsAmount > 0) {
-                      itemsToDelete[i].parentNode.removeChild(itemsToDelete[i])
-                      rowsAmount--
-                  }
-              }
+          removeElement (product) {
+              // let itemsToDelete = document.getElementsByClassName(key)
+              // let rowsAmount = document.getElementsByTagName('tr').length
+              // for (let i = 0; i < itemsToDelete.length; i++) {
+              //     while (rowsAmount > 0) {
+              //         itemsToDelete[i].parentNode.removeChild(itemsToDelete[i])
+              //         rowsAmount--
+              //     }
+              // }
+              this.productsList.splice(this.productsList.indexOf(product), 1)
           }
       },
       firebase () {
